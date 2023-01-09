@@ -52,9 +52,11 @@ def merge(coverage_dir, savepath, sparse=True):
         cov[test_key] = np.array(coverage_vector)
         if new_lines:
             testcases = cov.columns.values.tolist()
-            row = [int(test==test_key) for test in testcases]
+            rows = []
+            for l in new_lines:
+                rows.append([hits[l] if test==test_key else 0 for test in testcases])
             new_rows = pd.DataFrame(
-                [row[:] for i in range(len(new_lines))],
+                rows,
                 index=new_lines,
                 columns=testcases,
             )
